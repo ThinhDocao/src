@@ -1,0 +1,120 @@
+﻿@model List<S3Train.Web.Models.ProductCategoryViewModels>
+
+@{ 
+    decimal TongTien = 0;
+}
+
+@foreach (var item in ViewBag.ContentCategory)
+{
+
+    <li class="nav-item">
+        <a class="nav-link" href="/san-pham/@item.MetaTitle/@item.Id">@item.Name</a>
+    </li>
+}
+@foreach (var item in Model)
+{
+
+    <li class="nav-item">
+        <a class="nav-link" href="/san-pham/@item.MetaTitle/@item.Id">@item.Name</a>
+    </li>
+}
+
+@foreach (var menuType in ViewBag.MenuType)
+{
+    foreach (var item in ViewBag.Menu)
+    {
+        if (menuType.Id == item.MenuTypeID && menuType.Name == "Menu chính")
+        {
+            if (item.Text == "GIỎ HÀNG")
+            {
+                <li class="nav-item">
+
+                    <div class="dropdown" style="padding-top:20px">
+                        <a class="nav-link dropbtn" href="/san-pham/@item.Link">@item.Text</a>
+                        <div class="dropdown-content" style="width:300px;padding-top:5px">
+
+                            @foreach (var cart in ViewBag.Cart)
+                            {
+                                TongTien += cart.Product.Price * cart.Quatity;
+                                <div class="float-left" style="border-bottom:4px solid white">
+
+                                    <div>
+                                        <input type="button" class="deleteLayout" data-id="@cart.Product.Id" value="X" style="float:left;height:60px" />
+                                        <img src="@cart.Product.Image" style="width:60px;float:left" />@cart.Product.Name
+                                    </div>
+                                    <div>
+                                        Sl: @cart.Quatity
+                                    </div>
+                                    <div>
+                                        @(cart.Product.Price * cart.Quatity)$
+
+
+                                    </div>
+                                </div>
+                                
+                                
+                            }
+                            <div style="background-color:aqua">
+                                Tổng tiền: @TongTien
+                            </div>
+                            <div>
+                                <button style="width:100%" class="btn btn-danger" onclick="window.location.href='/thanh-toan'">Thanh toán</button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="/san-pham/@item.Link">@item.Text</a>
+                </li>
+            }
+
+        }
+
+    }
+}
+
+<style>
+    .dropbtn {
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #ddd;
+            }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #3e8e41;
+    }
+</style>
+
